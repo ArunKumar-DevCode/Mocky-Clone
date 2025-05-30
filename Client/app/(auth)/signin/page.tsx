@@ -25,16 +25,17 @@ export default function SignIn() {
   const onSubmit = async (data: userTypes) => {
     try {
       // Send user data to server
-       await axios.post(
+      const res = await axios.post(
         "https://mock-clone-vx69.onrender.com/api/auth/signin",
         data,
         {
           withCredentials: true,
         }
       );
-      // localStorage.setItem("accessToken",res.data.token)
-      // Validate user response
-      router.push("/");
+      if (res.status === 200 || res.status === 201) {
+        console.log("Login successful:", res.data);
+        router.push("/");
+      }
     } catch (error) {
       console.error("Failed to dispatch signin:", error);
     }
