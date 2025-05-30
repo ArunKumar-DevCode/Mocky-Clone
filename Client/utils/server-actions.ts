@@ -8,6 +8,7 @@ import {
   ForgotPasswordType,
   userTypes,
 } from "@/types/users";
+import axios from "axios";
 
 // Todo : Create a mock api endpoint
 export async function createMock(parsedData: MockFormData) {
@@ -73,7 +74,7 @@ export async function getMockById(id: string): Promise<MockFormData> {
 // Login user
 export async function LoginUser(data: userTypes) {
   try {
-    const res = await apiClient.post("/auth/signin", data, {
+    const res = await axios.post("https://mock-clone-vx69.onrender.com/api/auth/signin", data, {
       withCredentials: true,
     });
 
@@ -91,7 +92,7 @@ export async function LoginUser(data: userTypes) {
 // 1. Signup
 export async function signupUser(data: userTypes) {
   try {
-    const res = await apiClient.post("/auth/signup", data, {
+    const res = await axios.post("https://mock-clone-vx69.onrender.com/api/auth/signup", data, {
       withCredentials: true,
     });
 
