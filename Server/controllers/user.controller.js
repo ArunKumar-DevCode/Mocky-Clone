@@ -89,10 +89,9 @@ export const signin = async (req, res) => {
     // Set cookie
     res.cookie("accessToken", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // true on prod, false in dev
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Cross-site support in prod
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-      path: "/",
+      secure: true,
+      sameSite: "None",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     // Send success response
