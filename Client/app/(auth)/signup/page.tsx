@@ -6,8 +6,7 @@ import { userTypes } from "@/types/users";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signupUser } from "../../../utils/server-actions";
-import { toast } from "sonner";
-
+import {toast} from "sonner"
 export default function SignUp() {
   const {
     register,

@@ -5,8 +5,10 @@ import { useForm } from "react-hook-form";
 import { userTypes } from "@/types/users";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LoginUser } from "@/utils/server-actions";
+// import { LoginUser } from "@/utils/server-actions";
 import { toast } from "sonner";
+import axios from "axios";
+
 export default function SignIn() {
   const {
     register,
@@ -24,7 +26,13 @@ export default function SignIn() {
   // Login user
   const onSubmit = async (data: userTypes) => {
     try {
-      const res = await LoginUser(data);
+      const res = await axios.post(
+        "https://mock-clone-vx69.onrender.com/api/auth/signin",
+        data,
+        {
+          withCredentials: true,
+        }
+      );
       if (res.status === 200) {
         toast.success("Login successful!");
         router.push("/"); // navigate to home page
