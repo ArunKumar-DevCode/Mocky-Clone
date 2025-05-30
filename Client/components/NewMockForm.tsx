@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { addMock } from "@/features/mockSlice";
@@ -9,11 +10,9 @@ import axios from "axios";
 import Loader from "./Loader";
 import { useRouter } from "next/navigation";
 import ConverToParse from "@/utils/converToParse";
-type accessKeyProps = {
-  accessToken: string | undefined;
-};
+import { getCookie } from "cookies-next/client";
 
-export default function NewMockForm({ accessToken }: accessKeyProps) {
+export default function NewMockForm() {
   const {
     register,
     handleSubmit,
@@ -35,6 +34,12 @@ export default function NewMockForm({ accessToken }: accessKeyProps) {
     }
   };
 
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const accessToken = getCookie("accessToken");
+    setToken(typeof accessToken === "string" ? accessToken : null);
+  }, []);
   const onSubmit = async (data: MockFormData): Promise<void> => {
     // If the user clicked "Cancel", abort any request and skip submission
     if (cancelRef.current) {
@@ -74,7 +79,7 @@ export default function NewMockForm({ accessToken }: accessKeyProps) {
           signal: controller.signal,
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`, // Make sure this variable contains your JWT token
+            Authorization: `Bearer ${token}`, // Make sure this variable contains your JWT token
           },
         }
       );
