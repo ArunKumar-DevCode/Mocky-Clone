@@ -3,18 +3,21 @@
 import { MockFormData } from "@/types/mock";
 import { revalidateTag } from "next/cache";
 import axios from "axios";
-import getAccessToken from "./getAccess";
+import { getAccessToken } from "./getAccess";
 
 export async function fetchMocks(): Promise<MockFormData[]> {
   const accessToken = await getAccessToken();
 
   try {
-    const response = await axios.get("https://mock-clone-vx69.onrender.com/api/mocks/all", {
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axios.get(
+      "https://mock-clone-vx69.onrender.com/api/mocks/all",
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Failed to fetch mocks:", error);
@@ -26,12 +29,15 @@ export async function handleDeleteMock(id: string | undefined) {
   const accessToken = await getAccessToken();
 
   try {
-    const res = await fetch(`https://mock-clone-vx69.onrender.com/api/mocks/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const res = await fetch(
+      `https://mock-clone-vx69.onrender.com/api/mocks/delete/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Failed to delete mock");

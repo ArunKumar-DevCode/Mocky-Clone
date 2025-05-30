@@ -1,11 +1,8 @@
 import NewMockForm from "@/components/NewMockForm";
-import { cookies } from "next/headers";
+import { getCookie } from 'cookies-next/server';
 
 export default async function NewMock() {
-  const cookieStore = await cookies(); // ✅ No await
-  const accessToken = cookieStore.get("accessToken")?.value;
-  console.log(accessToken);
-  console.log(cookieStore);
+  const accessToken = await getCookie("accessToken");
 
   return (
     <section>

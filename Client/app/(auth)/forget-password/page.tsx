@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useForm } from "react-hook-form";
 import {
   Mail,
@@ -12,7 +12,8 @@ import {
 import axios from "axios";
 import Link from "next/link";
 import { ForgotPasswordType } from "@/types/users";
-import getCookie from "@/utils/getCookie";
+import { getCookie } from 'cookies-next/server';
+
 
 export default function ForgotPasswordForm() {
   const [isEmailSent, setIsEmailSent] = useState(false);
@@ -28,12 +29,16 @@ export default function ForgotPasswordForm() {
       email: "",
     },
   });
+  const [token, setToken] = useState<string | null>(null);
 
+  useEffect(() => {
+    const accessToken = getCookie('accessToken');
+    setToken(typeof accessToken === 'string' ? accessToken : null);
+  }, [])
   // Todo : To send a email to user
   const onSubmit = async (data: ForgotPasswordType) => {
     try {
-      const token: string | null = await getCookie("accessToken");
-
+      
       await axios.post(
         "https://mock-clone-vx69.onrender.com/api/auth/forget-password",
         data,
