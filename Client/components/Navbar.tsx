@@ -8,7 +8,9 @@ export default async function Navbar() {
   const accessToken = cookieStore.get("accessToken")?.value;
   const cookieToken = getCookie("accessToken");
   const isAuthenticated = cookieToken || accessToken ? true : false;
-
+  console.log("Cookie Token:", cookieToken);
+  console.log("access:",accessToken);
+  
   return (
     <header className="py-4 container mx-auto w-full max-w-[65%]">
       <nav className="flex items-center justify-between px-4 py-2">
