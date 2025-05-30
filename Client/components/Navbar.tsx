@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { cookies } from "next/headers";
+import { getCookie } from "cookies-next";
 
 export default async function Navbar() {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
-
-  const isAuthenticated = accessToken ? true : false;
+  const cookieToken = getCookie("accessToken");
+  const isAuthenticated = cookieToken || accessToken ? true : false;
 
   return (
     <header className="py-4 container mx-auto w-full max-w-[65%]">
