@@ -1,8 +1,9 @@
+// middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("accessToken")?.value;
-  console.log("AccessToken:", token); // Keep for debugging
+  console.log("AccessToken:", token); // Debug only
 
   if (!token) {
     return NextResponse.redirect(new URL("/signin", req.url));
@@ -13,7 +14,12 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/", "/design", "/design/view", "/design/view/:id*",
-    "/manage", "/design/confirmation", "/design/confirmation/:id*"
+    "/",
+    "/design",
+    "/design/view",
+    "/design/view/:id*",
+    "/manage",
+    "/design/confirmation",
+    "/design/confirmation/:id*",
   ],
 };

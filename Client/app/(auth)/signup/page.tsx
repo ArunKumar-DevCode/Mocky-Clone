@@ -26,7 +26,7 @@ export default function SignUp() {
     try {
       // Send user data to server
       const res = await axios.post(
-        "https://mocky-clone-gca8.vercel.app/api/auth/signup",
+        "https://mock-clone.onrender.com/api/auth/signup",
         data,
         { withCredentials: true }
       );

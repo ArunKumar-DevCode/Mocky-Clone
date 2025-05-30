@@ -49,7 +49,7 @@ export default function ResetPasswordPage() {
     const accessToken: string | null = await getCookie("accessToken");
     try {
       await axios.patch(
-        "https://mocky-clone-gca8.vercel.app/api/auth/reset-password",
+        "https://mock-clone.onrender.com/api/auth/reset-password",
         data,
         {
           headers: {
