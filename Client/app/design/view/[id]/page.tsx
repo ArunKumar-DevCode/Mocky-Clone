@@ -10,7 +10,7 @@ export default async function Page({ params }: PageProps) {
   const { id } = await params;
   const data = await getMockById(id);
 
-  const parseJSON = (input: string) => {
+  const parseJSON = (input: string | undefined) => {
     try {
       const cleaned = input?.replace(/,\s*}/g, "}")?.replace(/,\s*]/g, "]");
       return JSON.parse(cleaned || "{}");
@@ -18,8 +18,8 @@ export default async function Page({ params }: PageProps) {
       return input;
     }
   };
-  
-  const headers = parseJSON(data.httpHeader);
+
+  // const headers = parseJSON(data.httpHeader); // Bug : Response doesn't contain header
   const body = parseJSON(data.httpBody);
 
   return (
@@ -81,11 +81,12 @@ export default async function Page({ params }: PageProps) {
                 <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent"></div>
               </div>
               <div className="relative">
-                <pre className="overflow-x-auto rounded-md bg-slate-50/80 p-3 text-sm text-slate-800 shadow-inner ring-1 ring-slate-200/60 whitespace-pre-wrap break-words font-mono leading-relaxed">
+                {/* <pre className="overflow-x-auto rounded-md bg-slate-50/80 p-3 text-sm text-slate-800 shadow-inner ring-1 ring-slate-200/60 whitespace-pre-wrap break-words font-mono leading-relaxed">
                   {typeof headers === "object"
                     ? JSON.stringify(headers, null, 2)
                     : String(headers)}
-                </pre>
+                </pre> */}
+                <pre>Header</pre>
                 <div className="absolute inset-0 rounded-md bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
               </div>
             </div>
