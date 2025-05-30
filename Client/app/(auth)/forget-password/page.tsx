@@ -35,7 +35,7 @@ export default function ForgotPasswordForm() {
       const token: string | null = await getCookie("accessToken");
 
       await axios.post(
-        "https://mock-clone.onrender.com/api/auth/forget-password",
+        "https://mock-clone-vx69.onrender.com/api/auth/forget-password",
         data,
         {
           headers: {
