@@ -68,7 +68,7 @@ export default function NewMockForm({ accessToken }: accessKeyProps) {
       controllerRef.current = controller;
 
       const res = await axios.post(
-        "https://mock-clone.onrender.com/api/mocks/new",
+        "https://mock-clone-vx69.onrender.com/api/mocks/new",
         parsedData,
         {
           signal: controller.signal,

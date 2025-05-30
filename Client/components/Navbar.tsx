@@ -1,4 +1,3 @@
-"use server"
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { cookies } from "next/headers";
