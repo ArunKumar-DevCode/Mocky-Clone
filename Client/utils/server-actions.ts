@@ -1,74 +1,63 @@
 "use server";
 
+import { getCookie } from "cookies-next/server";
 import { MockFormData } from "@/types/mock";
 import { revalidateTag } from "next/cache";
-import axios from "axios";
-import { getAccessToken } from "./getAccess";
 
 export async function fetchMocks(): Promise<MockFormData[]> {
-  const accessToken = await getAccessToken();
+  const token = (await getCookie("accessToken")) as string | undefined;
+  if (!token) throw new Error("Missing access token");
 
-  try {
-    const response = await axios.get(
-      "https://mock-clone-vx69.onrender.com/api/mocks/all",
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch mocks:", error);
-    throw new Error("Failed to fetch mocks");
-  }
+  const res = await fetch("https://mock-clone-vx69.onrender.com/api/mocks/all", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch mocks");
+  return res.json();
 }
 
 export async function handleDeleteMock(id: string | undefined) {
-  const accessToken = await getAccessToken();
+  if (!id) throw new Error("Missing mock id");
 
-  try {
-    const res = await fetch(
-      `https://mock-clone-vx69.onrender.com/api/mocks/delete/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+  const token = (await getCookie("accessToken")) as string | undefined;
+  if (!token) throw new Error("Missing access token");
 
-    if (!res.ok) {
-      throw new Error("Failed to delete mock");
-    }
-
-    // Revalidate the tag used by fetchMocks()
-    revalidateTag("mocks");
-  } catch (error) {
-    console.error("Delete failed:", error);
-    throw error;
-  }
-}
-
-// GET : To get a mock by id
-export async function getMockById(id: string) {
-  const accessToken = await getAccessToken();
-
-  const response = await fetch(
-    `https://mock-clone-vx69.onrender.com/api/mocks/response/${id}`,
+  const res = await fetch(
+    `https://mock-clone-vx69.onrender.com/api/mocks/delete/${id}`,
     {
-      cache: "no-store",
-      next: { tags: ["mocks"] },
+      method: "DELETE",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     }
   );
-  if (!response.ok) {
-    throw new Error("Failed to fetch mock by id");
-  }
-  const data = await response.json();
-  console.log("Server Actions");
-  return data;
+
+  if (!res.ok) throw new Error("Failed to delete mock");
+
+  revalidateTag("mocks");
+}
+
+export async function getMockById(id: string) {
+  if (!id) throw new Error("Missing mock id");
+
+  const token = (await getCookie("accessToken")) as string | undefined;
+  if (!token) throw new Error("Missing access token");
+
+  const res = await fetch(
+    `https://mock-clone-vx69.onrender.com/api/mocks/response/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+      next: { tags: ["mocks"] },
+    }
+  );
+
+  if (!res.ok) throw new Error("Failed to fetch mock by id");
+
+  return res.json();
 }
