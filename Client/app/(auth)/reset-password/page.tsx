@@ -6,7 +6,7 @@ import { Eye, EyeOff, Lock, AlertCircle, CheckCircle2 } from "lucide-react";
 import { ResetPasswordTypes } from "@/types/users";
 import { resetPassword } from "@/utils/server-actions";
 import { toast } from "sonner";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function ResetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
