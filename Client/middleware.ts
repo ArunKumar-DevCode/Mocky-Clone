@@ -3,6 +3,7 @@ import { getAccessToken } from "./utils/getAccess";
 
 export async function middleware(req: NextRequest) {
   const isAuthenticated = await getAccessToken();
+  console.log("isAuthenticated", isAuthenticated);
   if (!isAuthenticated) {
     return NextResponse.redirect(new URL("/signin", req.url));
   }
