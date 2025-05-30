@@ -16,10 +16,5 @@ export type MockFormData = {
 };
 // Mock table props
 export interface MockTableProps {
-  data: MockFormData[]; // <-- Fix: should be an array
+  data: MockFormData[]; 
 }
-
-// // Mock Table map
-// export type MockTableMap = {
-//   data: MockFormData[];
-// };

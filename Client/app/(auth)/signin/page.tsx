@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { userTypes } from "@/types/users";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-
+import { LoginUser } from "@/utils/server-actions";
+import { toast } from "sonner";
 export default function SignIn() {
   const {
     register,
@@ -24,20 +24,16 @@ export default function SignIn() {
   // Login user
   const onSubmit = async (data: userTypes) => {
     try {
-      // Send user data to server
-      const res = await axios.post(
-        "https://mock-clone-vx69.onrender.com/api/auth/signin",
-        data,
-        {
-          withCredentials: true,
-        }
-      );
-      if (res.status === 200 || res.status === 201) {
-        console.log("Login successful:", res.data);
-        router.push("/");
+      const res = await LoginUser(data);
+      if (res.status === 200) {
+        toast.success("Login successful!");
+        router.push("/"); // navigate to home page
+      } else {
+        toast.error("Login failed. Please check your credentials.");
       }
     } catch (error) {
-      console.error("Failed to dispatch signin:", error);
+      console.error("Login failed:", error);
+      toast.error("Login failed. Please try again.");
     }
   };
 

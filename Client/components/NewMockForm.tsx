@@ -1,16 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { addMock } from "@/features/mockSlice";
-import { useRef } from "react";
 import { MockFormData } from "../types/mock";
-import axios from "axios";
 import Loader from "./Loader";
 import { useRouter } from "next/navigation";
 import ConverToParse from "@/utils/converToParse";
-import { getCookie } from "cookies-next/client";
+import { createMock } from "@/utils/server-actions";
 
 export default function NewMockForm() {
   const {
@@ -20,8 +17,6 @@ export default function NewMockForm() {
   } = useForm<MockFormData>();
   const router = useRouter();
   const dispatch = useDispatch();
-  const controllerRef = useRef<AbortController | null>(null);
-  const cancelRef = useRef(false);
 
   // Validate JSON format
   const validateJson = (value: string) => {
@@ -34,30 +29,9 @@ export default function NewMockForm() {
     }
   };
 
-  const [token, setToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    const accessToken = getCookie("accessToken");
-    setToken(typeof accessToken === "string" ? accessToken : null);
-  }, []);
   const onSubmit = async (data: MockFormData): Promise<void> => {
-    // If the user clicked "Cancel", abort any request and skip submission
-    if (cancelRef.current) {
-      cancelRef.current = false;
-
-      // Abort the request if it's ongoing
-      if (controllerRef.current) {
-        controllerRef.current.abort();
-        console.log("Request aborted due to cancel.");
-        controllerRef.current = null;
-      }
-
-      return;
-    }
-
-    console.log("Submitting data:", data);
-
     try {
+      // Todo : conversion to json
       const parsedData = {
         ...data,
         httpHeader: data.httpHeader
@@ -66,29 +40,16 @@ export default function NewMockForm() {
         httpBody: data.httpBody ? ConverToParse(data.httpBody) : data.httpBody,
       };
 
-      console.log("Parsed data:", parsedData);
+      console.log("Parsed data:", parsedData); // Bug : To fix the bug
 
-      // Set up abort controller before making the request
-      const controller = new AbortController();
-      controllerRef.current = controller;
-
-      const res = await axios.post(
-        "https://mock-clone-vx69.onrender.com/api/mocks/new",
-        parsedData,
-        {
-          signal: controller.signal,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Make sure this variable contains your JWT token
-          },
-        }
-      );
+      // Todo: To create a mock api endpoint
+      const res = await createMock(data);
 
       if (!res.data) {
         throw new Error("Response data is empty");
       }
 
-      dispatch(addMock(res.data));
+      dispatch(addMock(res.data)); // Todo : Dispatch datas to store
       router.push(`/design/confirmation/${res.data.id}`);
     } catch (err) {
       console.log(err);
@@ -221,9 +182,6 @@ export default function NewMockForm() {
           </button>
           <button
             type="submit"
-            onClick={() => {
-              cancelRef.current = true;
-            }}
             className="uppercase text-neutral-800 border border-gray-200 hover:bg-gray-200/50 hover:shadow cursor-pointer hover:text-gray-600 px-8 py-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center min-w-64 text-lg"
           >
             Cancel

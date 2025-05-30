@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { userTypes } from "@/types/users";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { signupUser } from "../../../utils/server-actions";
+import { toast } from "sonner";
 
 export default function SignUp() {
   const {
@@ -24,18 +25,16 @@ export default function SignUp() {
   // Login user
   const onSubmit = async (data: userTypes) => {
     try {
-      // Send user data to server
-      const res = await axios.post(
-        "https://mock-clone-vx69.onrender.com/api/auth/signup",
-        data,
-        { withCredentials: true }
-      );
-      //Validate user response
+      const res = await signupUser(data);
       if (res.status === 200) {
-        router.push("/signin"); // navigate to Login page
+        toast.success("Signup successful! Please login.");
+        router.push("/signin");
+      } else {
+        toast.error("Signup failed. Please try again.");
       }
     } catch (error) {
       console.error("Failed to dispatch signup:", error);
+      toast.error("Signup failed. Please try again.");
     }
   };
 

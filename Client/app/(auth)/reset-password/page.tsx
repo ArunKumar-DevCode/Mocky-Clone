@@ -1,11 +1,12 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Lock, AlertCircle, CheckCircle2 } from "lucide-react";
-import axios from "axios";
 import { ResetPasswordTypes } from "@/types/users";
-import { getCookie } from 'cookies-next/server';
+import { resetPassword } from "@/utils/server-actions";
+import { toast } from "sonner";
+import { useRouter } from "next/router";
 
 export default function ResetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,8 +17,6 @@ export default function ResetPasswordPage() {
     handleSubmit,
     watch,
     formState: { errors, isSubmitting, isSubmitSuccessful },
-    reset,
-    setError,
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -28,12 +27,6 @@ export default function ResetPasswordPage() {
 
   const password = watch("password", "");
 
-  const [token, setToken] = useState<string | null>(null);
-  
-    useEffect(() => {
-      const accessToken = getCookie('accessToken');
-      setToken(typeof accessToken === 'string' ? accessToken : null);
-    }, [])
   // Password validation
   const validatePassword = (value: string) => {
     const hasMinLength = value.length >= 8;
@@ -50,25 +43,17 @@ export default function ResetPasswordPage() {
 
     return true;
   };
-
+  const router = useRouter();
   const onSubmit = async (data: ResetPasswordTypes) => {
     try {
-      await axios.patch(
-        "https://mock-clone-vx69.onrender.com/api/auth/reset-password",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      reset();
+      const res = await resetPassword(data);
+      if (res.ok) {
+        router.push("/signin");
+      }
+      toast.success("Signup successful!");
     } catch (error) {
-      console.log(error);
-      setError("root.serverError", {
-        type: "server",
-        message: "Failed to reset password. Please try again.",
-      });
+      console.error("Signup failed:", error);
+      toast.error("Signup failed. Please try again.");
     }
   };
 

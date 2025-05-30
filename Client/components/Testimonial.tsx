@@ -27,7 +27,10 @@ export default function Testimonial() {
                   Demo: How to create a Mock API
                 </h1>
               </div>
-              <Link href="/design" className="bg-emerald-500 hover:bg-emerald-600 transition-colors inline-flex gap-2 items-center px-6 py-3 rounded-full font-medium text-base lg:text-lg text-white whitespace-nowrap">
+              <Link
+                href="/design"
+                className="bg-emerald-500 hover:bg-emerald-600 transition-colors inline-flex gap-2 items-center px-6 py-3 rounded-full font-medium text-base lg:text-lg text-white whitespace-nowrap"
+              >
                 Get Started
                 <MoveRight size={18} />
               </Link>

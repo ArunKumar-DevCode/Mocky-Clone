@@ -1,13 +1,7 @@
-"use server";
+import { cookies } from "next/headers";
 
-import { getCookie } from "cookies-next/server";
-
-export async function getAccessToken(): Promise<string> {
-  const token = getCookie("accessToken");
-
-  if (typeof token !== "string") {
-    throw new Error("Access token not found in cookies");
-  }
-
-  return token;
+export async function getAccessToken(): Promise<string | undefined> {
+  const cookie = await cookies();
+  const accessToken = cookie.get("accessToken")?.value;
+  return accessToken;
 }

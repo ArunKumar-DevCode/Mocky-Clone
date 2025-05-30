@@ -1,6 +1,6 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Mail,
@@ -9,11 +9,10 @@ import {
   ArrowRight,
   Loader2,
 } from "lucide-react";
-import axios from "axios";
 import Link from "next/link";
 import { ForgotPasswordType } from "@/types/users";
-import { getCookie } from 'cookies-next/server';
-
+import { forgetPassword } from "@/utils/server-actions";
+import { toast } from "sonner";
 
 export default function ForgotPasswordForm() {
   const [isEmailSent, setIsEmailSent] = useState(false);
@@ -22,40 +21,21 @@ export default function ForgotPasswordForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
   } = useForm<ForgotPasswordType>({
     mode: "onChange",
     defaultValues: {
       email: "",
     },
   });
-  const [token, setToken] = useState<string | null>(null);
 
-  useEffect(() => {
-    const accessToken = getCookie('accessToken');
-    setToken(typeof accessToken === 'string' ? accessToken : null);
-  }, [])
   // Todo : To send a email to user
   const onSubmit = async (data: ForgotPasswordType) => {
     try {
-      
-      await axios.post(
-        "https://mock-clone-vx69.onrender.com/api/auth/forget-password",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setIsEmailSent(true);
+      await forgetPassword(data);
+      toast.success("Reset link sent! Check your email.");
     } catch (error) {
-      console.log(error);
-      setError("root.serverError", {
-        type: "server",
-        message: "Could not send reset link. Please try again.",
-      });
+      console.error("Failed to send reset link:", error);
+      toast.error("Could not send reset link. Please try again.");
     }
   };
 
