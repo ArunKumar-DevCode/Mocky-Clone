@@ -93,7 +93,6 @@ export const signin = async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Cross-site support in prod
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       path: "/",
-      domain: process.env.NODE_ENV === "production" ? ".vercel.app" : undefined,
     });
 
     // Send success response
