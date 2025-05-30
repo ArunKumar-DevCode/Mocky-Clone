@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAccessToken } from "./utils/getAccess";
 
 export async function middleware(req: NextRequest) {
-  const isAuthenticated = await getAccessToken();
-  console.log("isAuthenticated", isAuthenticated);
-  if (!isAuthenticated) {
+  // Read the accessToken cookie from the request
+  const accessToken = req.cookies.get("accessToken")?.value;
+
+  console.log("AccessToken:", accessToken);
+
+  if (!accessToken) {
     return NextResponse.redirect(new URL("/signin", req.url));
   }
 
