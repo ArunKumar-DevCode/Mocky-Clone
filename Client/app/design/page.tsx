@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 export default async function NewMock() {
   const cookieStore = await cookies(); // ✅ No await
   const accessToken = cookieStore.get("accessToken")?.value;
+  console.log(accessToken);
+  console.log(cookieStore);
 
   return (
     <section>
