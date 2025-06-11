@@ -26,7 +26,7 @@ export default function SignIn() {
   const onSubmit = async (data: userTypes) => {
     try {
       const res = await axios.post(
-        "https://mocky-clone-orpin.vercel.app/api/auth/signin",
+        "https://mocky-clone-server.onrender.com/api/auth/signin",
         data,
         {
           withCredentials: true,
