@@ -100,7 +100,6 @@ export const signin = async (req, res) => {
       success: true,
       message: "Signin successful",
       data: { userId: user._id, email: user.email },
-      token,
     });
   } catch (error) {
     return res.status(500).json({
@@ -193,10 +192,16 @@ export const resetPassword = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("accessToken", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-  });
-  res.status(200).json({ message: "Logout successful" });
+  try {
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/", // Ensure path matches the one set in res.cookie during login
+    });
+    res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ message: "Error during logout" });
+  }
 };

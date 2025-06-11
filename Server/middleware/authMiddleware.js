@@ -1,22 +1,9 @@
 import jwt from "jsonwebtoken";
 
-// For Express to read cookies, make sure to use cookie-parser middleware
-// app.use(cookieParser());
-
 const authMiddleware = (req, res, next) => {
-  // 1. Check Authorization header
-  let token = null;
-
-  const authHeader = req?.headers?.authorization;
-  if (authHeader?.startsWith("Bearer ")) {
-    token = authHeader.split(" ")[1];
-  }
-
-  // 2. Fallback to token from cookies
-  if (!token && req.cookies?.accessToken) {
-    token = req.cookies.accessToken;
-  }
-
+  // Read token from cookies only
+  const token = req.cookies?.accessToken;
+  // Validate : Token valid or not
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }

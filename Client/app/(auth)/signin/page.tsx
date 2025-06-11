@@ -27,13 +27,14 @@ export default function SignIn() {
   const onSubmit = async (data: userTypes) => {
     try {
       const res = await axios.post(
-        "https://mock-clone-vx69.onrender.com/api/auth/signin",
+        "http://localhost:4201/api/auth/signin",
         data,
         {
           withCredentials: true,
         }
       );
       if (res.status === 200) {
+        localStorage.setItem("accessToken", res.data.token);
         toast.success("Login successful!");
         router.push("/"); // navigate to home page
       } else {

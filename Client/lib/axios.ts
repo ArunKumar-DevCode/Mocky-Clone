@@ -1,10 +1,8 @@
-import axios, { AxiosInstance } from "axios";
+import axios from "axios";
 
-const baseURL = "https://mock-clone-vx69.onrender.com/api";
-
-const apiClient: AxiosInstance = axios.create({
-  baseURL,
+const apiServer = axios.create({
+  baseURL: "http://localhost:4201/api",
   withCredentials: true,
 });
 
-export default apiClient;
+export default apiServer;

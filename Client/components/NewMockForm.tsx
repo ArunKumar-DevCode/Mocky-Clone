@@ -7,7 +7,8 @@ import { MockFormData } from "../types/mock";
 import Loader from "./Loader";
 import { useRouter } from "next/navigation";
 import ConverToParse from "@/utils/converToParse";
-import { createMock } from "@/utils/server-actions";
+// import { createMock } from "@/utils/server-actions";
+import axios from "axios";
 
 export default function NewMockForm() {
   const {
@@ -18,20 +19,20 @@ export default function NewMockForm() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  // Validate JSON format
-  const validateJson = (value: string) => {
-    if (!value) return true;
-    try {
-      JSON.parse(value);
-      return true;
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // // Validate JSON format
+  // const validateJson = (value: string) => {
+  //   if (!value) return true;
+  //   try {
+  //     JSON.parse(value);
+  //     return true;
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   const onSubmit = async (data: MockFormData): Promise<void> => {
     try {
-      // Todo : conversion to json
+       // Todo : conversion to json
       const parsedData = {
         ...data,
         httpHeader: data.httpHeader
@@ -39,11 +40,12 @@ export default function NewMockForm() {
           : data.httpHeader,
         httpBody: data.httpBody ? ConverToParse(data.httpBody) : data.httpBody,
       };
-
-      console.log("Parsed data:", parsedData); // Bug : To fix the bug
-
       // Todo: To create a mock api endpoint
-      const res = await createMock(data);
+      const res = await axios.post("http://localhost:4201/api/mocks/new", parsedData, {
+        withCredentials: true,
+      });
+
+      //  const res = await createMock(parsedData)
 
       if (!res.data) {
         throw new Error("Response data is empty");
@@ -151,9 +153,7 @@ export default function NewMockForm() {
 
           <textarea
             id="httpBody"
-            {...register("httpBody", {
-              validate: validateJson,
-            })}
+            {...register("httpBody")}
             className={`w-full border border-gray-300 rounded-md px-4 py-3 h-64 font-mono text-base focus:outline-none focus:border-emerald-400 ${
               errors.httpBody ? "border-red-500" : ""
             }`}

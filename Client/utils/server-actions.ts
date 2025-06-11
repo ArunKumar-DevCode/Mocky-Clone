@@ -1,34 +1,29 @@
 "use server";
 
 import { MockFormData } from "@/types/mock";
-import { revalidateTag } from "next/cache";
-import apiClient from "@/lib/axios";
+import apiServer from "@/lib/axios"; // this should NOT use "use client"
 import {
   ResetPasswordTypes,
   ForgotPasswordType,
   userTypes,
 } from "@/types/users";
-import axios from "axios";
+import { revalidateTag } from "next/cache";
 
-// Todo : Create a mock api endpoint
+// Create a mock API endpoint
 export async function createMock(parsedData: MockFormData) {
   try {
-    const res = await apiClient.post("/mocks/new", parsedData, {
-      withCredentials: true,
-    });
-
+    const res = await apiServer.post("/mocks/new", parsedData);
     return res.data;
   } catch (error) {
     console.error("Failed to create mock:", error);
     throw new Error("Failed to create mock");
   }
 }
+
 // Fetch all mocks
 export async function fetchMocks(): Promise<MockFormData[]> {
   try {
-    const res = await apiClient.get<MockFormData[]>("/mocks/all", {
-      withCredentials: true,
-    });
+    const res = await apiServer.get("/mocks/all");
     return res.data;
   } catch (error) {
     console.error("Error fetching mocks:", error);
@@ -41,15 +36,14 @@ export async function handleDeleteMock(id: string | undefined) {
   if (!id) throw new Error("Missing mock ID");
 
   try {
-    const res = await apiClient.delete(`/mocks/delete/${id}`, {
-      withCredentials: true,
-    });
+    const res = await apiServer.delete(`/mocks/delete/${id}`);
 
     if (res.status !== 200) {
       throw new Error("Failed to delete mock");
     }
 
     revalidateTag("mocks");
+    return { success: true };
   } catch (error) {
     console.error("Error deleting mock:", error);
     throw error;
@@ -61,9 +55,7 @@ export async function getMockById(id: string): Promise<MockFormData> {
   if (!id) throw new Error("Missing mock ID");
 
   try {
-    const res = await apiClient.get(`/mocks/response/${id}`, {
-      withCredentials: true,
-    });
+    const res = await apiServer.get(`/mocks/response/${id}`);
     return res.data;
   } catch (error) {
     console.error("Error fetching mock by ID:", error);
@@ -74,7 +66,7 @@ export async function getMockById(id: string): Promise<MockFormData> {
 // Login user
 export async function LoginUser(data: userTypes) {
   try {
-    const res = await axios.post("https://mock-clone-vx69.onrender.com/api/auth/signin", data, {
+    const res = await apiServer.post("/auth/signin", data, {
       withCredentials: true,
     });
 
@@ -89,10 +81,10 @@ export async function LoginUser(data: userTypes) {
   }
 }
 
-// 1. Signup
+// Signup user
 export async function signupUser(data: userTypes) {
   try {
-    const res = await axios.post("https://mock-clone-vx69.onrender.com/api/auth/signup", data, {
+    const res = await apiServer.post("/auth/signup", data, {
       withCredentials: true,
     });
 
@@ -103,10 +95,10 @@ export async function signupUser(data: userTypes) {
   }
 }
 
-// 2. Reset Password
+// Reset password
 export async function resetPassword(data: ResetPasswordTypes) {
   try {
-    const res = await apiClient.patch("/auth/reset-password", data, {
+    const res = await apiServer.patch("/auth/reset-password", data, {
       withCredentials: true,
     });
 
@@ -117,15 +109,33 @@ export async function resetPassword(data: ResetPasswordTypes) {
   }
 }
 
-// 3. Forget Password
+// Forget password
 export async function forgetPassword(data: ForgotPasswordType) {
   try {
-    const res = await apiClient.post("/auth/forget-password", data, {
+    const res = await apiServer.post("/auth/forget-password", data, {
       withCredentials: true,
     });
     return res.data;
   } catch (error) {
     console.error("Forget password failed:", error);
     throw error;
+  }
+}
+
+// Logout user
+export async function logout() {
+  try {
+    const res = await apiServer.post("/auth/logout", null, {
+      withCredentials: true,
+    });
+
+    if (res.status === 200) {
+      return { success: true, message: "Logout successful" };
+    } else {
+      return { success: false, message: "Logout failed on server" };
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
+    return { success: false, message: "Error during logout" };
   }
 }
