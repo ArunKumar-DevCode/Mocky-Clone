@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 export default async function Navbar() {
   const cookieStore = await cookies();
-  const isAuthenticated = cookieStore.get("accessToken")?.value || "Not found";
+  const isAuthenticated = cookieStore.get("accessToken")?.value ? true : false;
   return (
     <header className="py-4 container mx-auto w-full max-w-[70%]">
       <nav className="flex items-center justify-between px-4 py-2">
