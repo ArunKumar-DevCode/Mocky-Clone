@@ -71,7 +71,6 @@ export default function Testimonial() {
                       onLoadedData={() => setIsVideoLoaded(true)}
                       title="Mock API Creation Demo"
                       autoPlay={isVideoLoaded}
-                      controls
                     />
                   )}
                 </div>
