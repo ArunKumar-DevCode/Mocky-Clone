@@ -8,6 +8,8 @@ import { useState } from "react";
 export default function Testimonial() {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  console.log(isVideoLoaded);
+
   return (
     <>
       <section className="relative w-full min-h-screen py-18 flex justify-center items-center">
@@ -70,7 +72,7 @@ export default function Testimonial() {
                       className="w-full h-full object-cover"
                       onLoadedData={() => setIsVideoLoaded(true)}
                       title="Mock API Creation Demo"
-                      autoPlay={isVideoLoaded}
+                      autoPlay
                     />
                   )}
                 </div>
