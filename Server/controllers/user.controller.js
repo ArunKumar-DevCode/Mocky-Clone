@@ -93,7 +93,7 @@ export const signin = async (req, res) => {
       sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000,
       path: "/",
-      domain: "mocky-clone-orpin.vercel.app", // ✅ exact domain
+      // domain: "mocky-clone-orpin.vercel.app", // ✅ exact domain
     });
     // Send success response
     return res.status(200).json({
