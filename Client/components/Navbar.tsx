@@ -8,7 +8,7 @@ export default async function Navbar() {
   const isAuthenticated = cookieStore.get("accessToken")?.value ? true : false;
 
   return (
-    <header className="py-4 container mx-auto w-full max-w-[70%]">
+    <header className="py-4 container mx-auto w-full md:max-w-[70%]">
       <nav className="flex items-center justify-between px-4 py-2">
         <Link href="/" className="text-3xl text-[#4E4949] cursor-pointer">
           MockAPI
