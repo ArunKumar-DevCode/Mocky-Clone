@@ -41,7 +41,7 @@ export default function NewMockForm() {
         httpBody: data.httpBody ? ConverToParse(data.httpBody) : data.httpBody,
       };
       // Todo: To create a mock api endpoint
-      const res = await axios.post("http://localhost:4201/api/mocks/new", parsedData, {
+      const res = await axios.post("https://mocky-clone-server.onrender.com/api/mocks/new", parsedData, {
         withCredentials: true,
       });
 
