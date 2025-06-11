@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LoginUser } from "@/utils/server-actions";
 import { toast } from "sonner";
-// import axios from "axios";
+import axios from "axios";
 
 export default function SignIn() {
   const {
@@ -26,16 +26,19 @@ export default function SignIn() {
   // Login user
   const onSubmit = async (data: userTypes) => {
     try {
-      await LoginUser(data);
-      /*axios.post(
+      const res = await axios.post(
         "https://mocky-clone-orpin.vercel.app/api/auth/signin",
         data,
         {
           withCredentials: true,
         }
-      );*/
-      toast.success("Login successful!");
-      router.push("/"); // navigate to home page
+      );
+      if (res.status === 200) {
+        toast.success("Login successful!");
+        router.push("/"); // navigate to home page
+      } else {
+        toast.error("Login failed. Please check your credentials.");
+      }
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please try again.");
