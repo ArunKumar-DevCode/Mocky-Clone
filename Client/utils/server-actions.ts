@@ -66,9 +66,7 @@ export async function getMockById(id: string): Promise<MockFormData> {
 // Login user
 export async function LoginUser(data: userTypes) {
   try {
-    const res = await apiServer.post("/auth/signin", data, {
-      withCredentials: true,
-    });
+    const res = await apiServer.post("/auth/signin", data);
 
     if (res.status === 200 || res.status === 201) {
       return res.data;
@@ -84,9 +82,7 @@ export async function LoginUser(data: userTypes) {
 // Signup user
 export async function signupUser(data: userTypes) {
   try {
-    const res = await apiServer.post("/auth/signup", data, {
-      withCredentials: true,
-    });
+    const res = await apiServer.post("/auth/signup", data);
 
     return res.data;
   } catch (error) {
@@ -98,9 +94,7 @@ export async function signupUser(data: userTypes) {
 // Reset password
 export async function resetPassword(data: ResetPasswordTypes) {
   try {
-    const res = await apiServer.patch("/auth/reset-password", data, {
-      withCredentials: true,
-    });
+    const res = await apiServer.patch("/auth/reset-password", data);
 
     return res.data;
   } catch (error) {
@@ -112,9 +106,7 @@ export async function resetPassword(data: ResetPasswordTypes) {
 // Forget password
 export async function forgetPassword(data: ForgotPasswordType) {
   try {
-    const res = await apiServer.post("/auth/forget-password", data, {
-      withCredentials: true,
-    });
+    const res = await apiServer.post("/auth/forget-password", data);
     return res.data;
   } catch (error) {
     console.error("Forget password failed:", error);
