@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "./ui/button"; // Assuming your Button component is here
 import { cookies } from "next/headers";
+import LogoutButton from "./LogoutButton"; // Import the client-side LogoutButton
 
 export default async function Navbar() {
   const cookieStore = await cookies();
   const isAuthenticated = cookieStore.get("accessToken")?.value ? true : false;
+
   return (
     <header className="py-4 container mx-auto w-full max-w-[70%]">
       <nav className="flex items-center justify-between px-4 py-2">
@@ -12,12 +14,11 @@ export default async function Navbar() {
           MockAPI
         </Link>
 
-        {/* Wait for auth state to be determined */}
         {isAuthenticated ? (
           <div className="items-center gap-12 flex">
             <div className="hidden bg-white/80 rounded-full md:flex gap-5 border border-gray-300 px-6 py-3 divide-x-2 divide-gray-200">
               <Link
-                href="#"
+                href="#" // You might want to update this href to an actual page or section ID
                 className="capitalize text-md font-medium text-gray-700 pr-4"
               >
                 How it works
@@ -36,14 +37,7 @@ export default async function Navbar() {
               >
                 New Mock
               </Link>
-              <Button
-                className="capitalize text-md px-6 py-3 font-medium rounded-full"
-                size={"lg"}
-                variant={"ghost"}
-                
-              >
-                Logout
-              </Button>
+              <LogoutButton /> {/* Use the client-side LogoutButton here */}
             </div>
           </div>
         ) : (
