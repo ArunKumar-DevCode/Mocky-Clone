@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000;
 // Middleware for CORS
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://mocky-clone-orpin.vercel.app",
     credentials: true,
   })
 );
