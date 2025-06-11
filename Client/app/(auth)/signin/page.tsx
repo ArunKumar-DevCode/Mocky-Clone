@@ -26,7 +26,7 @@ export default function SignIn() {
   // Login user
   const onSubmit = async (data: userTypes) => {
     try {
-      const res = await LoginUser(data);
+      await LoginUser(data);
       /*axios.post(
         "https://mocky-clone-orpin.vercel.app/api/auth/signin",
         data,
@@ -34,13 +34,8 @@ export default function SignIn() {
           withCredentials: true,
         }
       );*/
-      if (res.status === 200) {
-        localStorage.setItem("accessToken", res.data.token);
-        toast.success("Login successful!");
-        router.push("/"); // navigate to home page
-      } else {
-        toast.error("Login failed. Please check your credentials.");
-      }
+      toast.success("Login successful!");
+      router.push("/"); // navigate to home page
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please try again.");
