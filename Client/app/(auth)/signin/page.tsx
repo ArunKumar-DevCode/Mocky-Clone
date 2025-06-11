@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { userTypes } from "@/types/users";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-// import { LoginUser } from "@/utils/server-actions";
+import { LoginUser } from "@/utils/server-actions";
 import { toast } from "sonner";
-import axios from "axios";
+// import axios from "axios";
 
 export default function SignIn() {
   const {
@@ -26,13 +26,14 @@ export default function SignIn() {
   // Login user
   const onSubmit = async (data: userTypes) => {
     try {
-      const res = await axios.post(
-        "http://localhost:4201/api/auth/signin",
+      const res = await LoginUser(data);
+      /*axios.post(
+        "https://mocky-clone-orpin.vercel.app/api/auth/signin",
         data,
         {
           withCredentials: true,
         }
-      );
+      );*/
       if (res.status === 200) {
         localStorage.setItem("accessToken", res.data.token);
         toast.success("Login successful!");
