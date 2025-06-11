@@ -100,6 +100,7 @@ export const signin = async (req, res) => {
       success: true,
       message: "Signin successful",
       data: { userId: user._id, email: user.email },
+      accessToken: token,
     });
   } catch (error) {
     return res.status(500).json({

@@ -35,6 +35,7 @@ export default function SignIn() {
       if (res.status === 200) {
         toast.success("Login successful!");
         router.push("/"); // navigate to home page
+        localStorage.setItem("accessToken", res.data.accessToken);
       } else {
         toast.error("Login failed. Please check your credentials.");
       }

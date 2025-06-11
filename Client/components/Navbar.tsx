@@ -1,11 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "./ui/button"; // Assuming your Button component is here
-import { cookies } from "next/headers";
 import LogoutButton from "./LogoutButton"; // Import the client-side LogoutButton
+import { useEffect, useState } from "react";
 
-export default async function Navbar() {
-  const cookieStore = await cookies();
-  const isAuthenticated = cookieStore.get("accessToken")?.value ? true : false;
+export default function Navbar() {
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsUserLoggedIn(true);
+    }
+  }, []);
 
   return (
     <header className="py-4 container mx-auto w-full md:max-w-[70%]">
@@ -14,7 +22,7 @@ export default async function Navbar() {
           MockAPI
         </Link>
 
-        {isAuthenticated ? (
+        {isUserLoggedIn ? (
           <div className="items-center gap-12 flex">
             <div className="hidden bg-white/80 rounded-full md:flex gap-5 border border-gray-300 px-6 py-3 divide-x-2 divide-gray-200">
               <Link
