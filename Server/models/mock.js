@@ -1,6 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
 const mockResponseSchema = new Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   identifier: {
     type: String,
     default: "response",

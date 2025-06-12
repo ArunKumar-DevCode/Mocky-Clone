@@ -1,4 +1,5 @@
 "use client";
+
 import Background from "@/public/Rectangle.png";
 import Image from "next/image";
 import { MoveRight, Play } from "lucide-react";
@@ -71,8 +72,9 @@ export default function Testimonial() {
                       src="https://ik.imagekit.io/dfencrym0/API.mp4"
                       className="w-full h-full object-cover"
                       onLoadedData={() => setIsVideoLoaded(true)}
-                      title="Mock API Creation Demo"
+                      title="Introduction to API Calls"
                       autoPlay
+                      controls
                     />
                   )}
                 </div>

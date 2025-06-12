@@ -12,8 +12,8 @@ const router = express.Router();
 config();
 
 // Public routes
-router.get("/all", getAllMocks);
-router.get("/response/:id", getMockById);
+router.get("/all", authMiddleware, getAllMocks);
+router.get("/response/:id",authMiddleware,getMockById);
 
 // Protected routes
 router.post("/new", authMiddleware, createMock);
